@@ -46,11 +46,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="head/favicon.ico">
-  <script type="module" crossorigin src="index.js?v=6"></script>
-  <link rel="stylesheet" href="index.css">
+  <script type="module" crossorigin src="index.js?v=7"></script>
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
+    <audio id="site-bgm" autoplay loop preload="auto" src="sounds/room-ambience.mp3"></audio>
+    <script>
+        (function () {
+            var a = document.getElementById("site-bgm");
+            if (!a) return;
+            if (localStorage.getItem("soundActive") === "false") {
+                a.pause();
+                a.autoplay = false;
+                return;
+            }
+            a.volume = 0.35;
+            var tryPlay = function () {
+                if (localStorage.getItem("soundActive") === "false") return;
+                var p = a.play();
+                if (p && p.catch) p.catch(function () {});
+            };
+            tryPlay();
+            a.addEventListener("canplay", tryPlay);
+            a.addEventListener("canplaythrough", tryPlay);
+            a.addEventListener("loadeddata", tryPlay);
+            window.addEventListener("load", tryPlay);
+        })();
+    </script>
     <!--Canvas-->
     <canvas id="main-canvas"></canvas>
 
